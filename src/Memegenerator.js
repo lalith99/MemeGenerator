@@ -9,6 +9,8 @@ constructor(){
         randomImage : "http://i.imgflip.com/1bij.jpg",
         allMemeImages :[]
     }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
 }
 componentDidMount(){
     fetch("https://api.imgflip.com/get_memes")
@@ -19,32 +21,54 @@ componentDidMount(){
     
      })
 }
+handleSubmit(event){
+    event.preventDefault()
+    const randNum = Math.floor(Math.random() * this.state.allMemeImages.length)
+    const randMemeImg = this.state.allMemeImages[randNum].url
+    this.setState({
+        randomImage:randMemeImg
+    })
+
+}
+
+handleChange(event){
+
+    const {name , value} = event.target
+    this.setState({ [name] :value
+
+    })
 
 
+}
 render(){
     return(
         <div>
-            <form className = "meme-form">
+            <form className = "meme-form" onSubmit = {this.handleSubmit}>
 
              <input type = "text"
-              name = "toptext"
-              value = {this.state.bottomText}
-              onChange = {this.handleChange.topText}
+              name = "topText"
+              value = {this.state.topText}
+              onChange = {this.handleChange}
               placeholder = "Top Text"
               />
 
               <input type = "text"
-              name = "bottomtext"
+              name = "bottomText"
               value = {this.state.bottomText}
-              onChange = {this.handleChange.bottomText}
+              onChange = {this.handleChange}
               placeholder = "Bottom text"
               />
+              <button > Generate!</button>
 
             
 
             </form>
-
-            <button> Generate!</button>
+             <div className = "meme">
+             <img src={this.state.randomImage} alt="" />
+<h2 className = "top"> {this.state.topText}</h2>
+<h2 className = "bottom"> {this.state.bottomText}</h2>
+             </div>
+            
         </div>
     )
 }
